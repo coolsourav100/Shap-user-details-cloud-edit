@@ -1,4 +1,17 @@
 let form = document.getElementById('addform')
+function windowrefresh(){
+    let list = document.getElementById('list')
+    while (list.hasChildNodes()) {
+            list.removeChild(list.firstChild);
+          }
+    axios.get('https://crudcrud.com/api/c6c918cbd3c44ae8961597ae3dc553b6/appointentData')
+    .then((res)=>{
+        res.data.map((item)=>{
+            showUserDetails(item)
+            // console.log(item)
+        })
+    })
+}
 
     form.addEventListener('submit',addData=(e)=>{
         e.preventDefault();
@@ -10,27 +23,30 @@ let form = document.getElementById('addform')
             email,
             phone
         }
-        axios.post('https://crudcrud.com/api/fbd1aa9830894b13b66a0d0c519cc44d/appointentData',{obj})
-        .then((res)=>console.log(res))
+        axios.post('https://crudcrud.com/api/c6c918cbd3c44ae8961597ae3dc553b6/appointentData',{obj})
+        .then((res)=>{
+            setTimeout(()=>{
+
+                windowrefresh()
+            },500)
+            console.log(res)})
         .catch((err)=>console.log(err))
+        
     })
 
 // Loading in the screen
 window.addEventListener('DOMContentLoaded',()=>{
-    axios.get('https://crudcrud.com/api/fbd1aa9830894b13b66a0d0c519cc44d/appointentData')
-    .then((res)=>{
-        res.data.map((item)=>{
-            showUserDetails(item)
-            // console.log(item)
-        })
-    })
+    windowrefresh()
 })
-
 // 
     
     function showUserDetails(item){
     let list = document.getElementById('list')
+    // while (list.hasChildNodes()) {
+    //     list.removeChild(list.firstChild);
+    //   }
     let li = document.createElement('li');
+    // li.textContent =''
     li.textContent = `Name : ${item.obj.name}  Email : ${item.obj.email}  Phone :${item.obj.phone}`
     // create Delete Button
     let deletebutton = document.createElement('button');
@@ -42,9 +58,13 @@ window.addEventListener('DOMContentLoaded',()=>{
     editbtn.className ='btn btn-primary float-right'
     // delete
     deletebutton.onclick=()=>{
-        axios.delete(`https://crudcrud.com/api/fbd1aa9830894b13b66a0d0c519cc44d/appointentData/${item._id}`)
+        
+        axios.delete(`https://crudcrud.com/api/c6c918cbd3c44ae8961597ae3dc553b6/appointentData/${item._id}`)
         .then((res)=>{
-            window.alert(`Deletion Status: ${res.statusText}`)
+            console.log(`Deletion Status: ${res.statusText}`)
+            setTimeout(()=>{
+                    windowrefresh()
+            },500)
         })
     }
     editbtn.onclick=()=>{
@@ -60,5 +80,6 @@ window.addEventListener('DOMContentLoaded',()=>{
     li.appendChild(editbtn)
     li.appendChild(deletebutton)
     list.appendChild(li)
+    
 
 }
