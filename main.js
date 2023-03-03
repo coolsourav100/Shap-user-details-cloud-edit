@@ -26,7 +26,6 @@ function windowrefresh(){
         axios.post('https://crudcrud.com/api/c6c918cbd3c44ae8961597ae3dc553b6/appointentData',{obj})
         .then((res)=>{
             setTimeout(()=>{
-
                 windowrefresh()
             },500)
             console.log(res)})
@@ -68,14 +67,27 @@ window.addEventListener('DOMContentLoaded',()=>{
         })
     }
     editbtn.onclick=()=>{
-        localStorage.removeItem(obj.email)
         list.removeChild(li)
         let name1  = document.getElementById('name')
         let email1 = document.getElementById('email')
         let phone1 = document.getElementById('phone')
-        name1.value = obj.name
-        email1.value = obj.email
-        phone1.value = obj.phone
+        name1.value = item.obj.name
+        email1.value = item.obj.email
+        phone1.value = item.obj.phone
+
+        obj ={
+            name1,
+            email1,
+            phone1
+        }
+
+        axios.delete(`https://crudcrud.com/api/c6c918cbd3c44ae8961597ae3dc553b6/appointentData/${item._id}`,)
+        .then((res)=>{
+            setTimeout(()=>{
+                windowrefresh()
+            },500)
+            console.log(res)})
+        .catch((err)=>console.log(err))
     }
     li.appendChild(editbtn)
     li.appendChild(deletebutton)
