@@ -20,17 +20,18 @@ window.addEventListener('DOMContentLoaded',()=>{
     axios.get('https://crudcrud.com/api/fbd1aa9830894b13b66a0d0c519cc44d/appointentData')
     .then((res)=>{
         res.data.map((item)=>{
-            showUserDetails(item.obj)
+            showUserDetails(item)
+            // console.log(item)
         })
     })
 })
 
 // 
     
-    function showUserDetails(obj){
+    function showUserDetails(item){
     let list = document.getElementById('list')
     let li = document.createElement('li');
-    li.textContent = `Name : ${obj.name}  Email : ${obj.email}  Phone :${obj.phone}`
+    li.textContent = `Name : ${item.obj.name}  Email : ${item.obj.email}  Phone :${item.obj.phone}`
     // create Delete Button
     let deletebutton = document.createElement('button');
     deletebutton.textContent ='Delete'
@@ -39,9 +40,12 @@ window.addEventListener('DOMContentLoaded',()=>{
     let editbtn = document.createElement('button')
     editbtn.textContent = 'Edit'
     editbtn.className ='btn btn-primary float-right'
+    // delete
     deletebutton.onclick=()=>{
-        localStorage.removeItem(obj.email)
-        list.removeChild(li)
+        axios.delete(`https://crudcrud.com/api/fbd1aa9830894b13b66a0d0c519cc44d/appointentData/${item._id}`)
+        .then((res)=>{
+            window.alert(`Deletion Status: ${res.statusText}`)
+        })
     }
     editbtn.onclick=()=>{
         localStorage.removeItem(obj.email)
